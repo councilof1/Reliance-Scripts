@@ -1,0 +1,22 @@
+##Calculate Furthest out due date##
+actionPlanSubform = thisDocument.getSubform("CORRACT_IMPLEMENT_SOLUTION_PREVENT_RECURRENCE")
+actionPlanRecords = actionPlanSubform.getRecords()
+actionPlanDueDate = ""
+myIDs = []
+counter = 0
+if actionPlanSubform != None:
+ if actionPlanSubform.size() > 0:
+  for rec in actionPlanRecords:
+   #if first record, then store first action plan due date
+   counter = counter + 1
+   if counter == 1:
+    actionPlanDueDate = rec.getFieldValue("CORRACT_ACTION_ITEM_TARGET_DUE_DATE")
+   #otherwise compare due dates and replace with larger date if needed
+   else:
+    thisRecordDueDate = rec.getFieldValue("CORRACT_ACTION_ITEM_TARGET_DUE_DATE")
+    if thisRecordDueDate != None:
+     if (Rdate.compare(thisRecordDueDate, actionPlanDueDate) == 1):
+      actionPlanDueDate = thisRecordDueDate
+  if (actionPlanDueDate != None):
+   dueDate = Rdate.getBusinessDaysDifference(Rdate.now(), actionPlanDueDate)
+   print dueDate
